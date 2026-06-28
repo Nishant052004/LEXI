@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+:root {
+  --background: #030712;
+  --foreground: #f3f4f6;
+  --neon-blue: #00f0ff;
+  --neon-purple: #bd00ff;
+  --neon-green: #39ff14;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-neon-blue: var(--neon-blue);
+  --color-neon-purple: var(--neon-purple);
+  --color-neon-green: var(--neon-green);
+}
+
+body {
+  background: radial-gradient(circle at 50% 50%, #0b0d19 0%, #030712 100%);
+  color: var(--foreground);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(3, 7, 18, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(189, 0, 255, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.5);
+}
+
+/* Moving grid background */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center center;
+}
+
+/* Neon shadows */
+.shadow-neon-blue {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+.shadow-neon-purple {
+  box-shadow: 0 0 15px rgba(189, 0, 255, 0.2);
+}
+.shadow-neon-green {
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+}
+
+/* Glassmorphism styling */
+.glass-panel {
+  background: rgba(10, 15, 30, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-neon {
+  background: rgba(10, 15, 30, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass-input:focus {
+  border-color: rgba(0, 240, 255, 0.5);
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+
+/* Pulsing effect for live agents */
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+    box-shadow: 0 0 3px rgba(57, 255, 20, 0.1);
+  }
+}
+
+.agent-live-dot {
+  background-color: var(--neon-green);
+  animation: neon-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.crt-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 240, 255, 0.04);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
