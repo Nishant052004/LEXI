@@ -1575,10 +1575,10 @@ export default function AIOSHome() {
 
       {/* ------------------ MAIN OS SHELL ------------------ */}
       {isAuthenticated && (
-        <div className="flex-1 flex flex-col h-screen overflow-hidden z-10">
+        <div className="app-shell flex-1 flex flex-col h-screen overflow-hidden z-10">
           
           {/* HEADER AND STATUS BAR */}
-          <header className={`h-14 border-b px-6 flex items-center justify-between shrink-0 transition-colors ${
+          <header className={`app-header h-14 border-b px-3 sm:px-6 flex items-center justify-between shrink-0 transition-colors ${
             theme === "dark" ? "bg-slate-950/70 border-slate-900" : "bg-white/70 border-slate-200"
           } backdrop-blur-md`}>
             <div className="flex items-center gap-3">
@@ -1633,7 +1633,7 @@ export default function AIOSHome() {
                 {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-purple-400" />}
               </button>
 
-              <div className="flex items-center gap-2 text-xs font-mono">
+              <div className="header-account flex items-center gap-2 text-xs font-mono">
                 <div className="hidden md:flex items-center gap-1.5">
                   <Wifi className="w-3.5 h-3.5 text-cyan-400" />
                   <span className={websocketStatus === "connected" ? "text-emerald-400" : "text-amber-400 animate-pulse"}>
@@ -1654,10 +1654,10 @@ export default function AIOSHome() {
           <div className="flex-1 flex overflow-hidden">
             
             {/* SIDEBAR NAVIGATION */}
-            <nav className={`w-16 md:w-56 border-r flex flex-col justify-between shrink-0 p-3 z-20 transition-colors ${
+            <nav className={`mobile-nav w-14 sm:w-16 md:w-56 border-r flex flex-col justify-between shrink-0 p-2 md:p-3 z-20 transition-colors ${
               theme === "dark" ? "bg-slate-950/40 border-slate-900" : "bg-white/40 border-slate-200"
             } backdrop-blur-sm`}>
-              <div className="space-y-1">
+              <div className="mobile-nav-items space-y-1">
                 {[
                   { id: "dashboard", label: "Dashboard", icon: Cpu },
                   { id: "chat", label: "Chats", icon: MessageSquare },
@@ -1673,6 +1673,7 @@ export default function AIOSHome() {
                   return (
                     <button
                       key={item.id}
+                      aria-label={item.label}
                       onClick={() => setActiveTab(item.id)}
                       className={`w-full flex items-center justify-center md:justify-start gap-3 px-3 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all border cursor-pointer ${
                         isActive
@@ -1689,7 +1690,7 @@ export default function AIOSHome() {
 
               {/* Sidebar bottom telemetry indicator / Profile */}
               <div 
-                className="p-2 rounded-xl bg-slate-950/60 border border-slate-900 text-slate-400 space-y-2 cursor-pointer hover:border-slate-700 transition-all"
+                className="mobile-nav-profile p-2 rounded-xl bg-slate-950/60 border border-slate-900 text-slate-400 space-y-2 cursor-pointer hover:border-slate-700 transition-all"
                 onClick={() => {
                   setActiveTab("settings");
                   notify("Control center focused.", "info");
@@ -1712,7 +1713,7 @@ export default function AIOSHome() {
             <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10">
               
               {/* CENTRAL RENDERING PANEL */}
-              <section className="flex-1 flex flex-col overflow-y-auto p-4 md:p-6 min-w-0">
+              <section className="content-viewport flex-1 flex flex-col overflow-y-auto p-3 sm:p-4 md:p-6 min-w-0">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeTab}
@@ -1865,7 +1866,7 @@ export default function AIOSHome() {
 
                     {/* ------------------ TAB: MODERN CHAT WINDOW ------------------ */}
                     {activeTab === "chat" && (
-                      <div className="flex-1 flex flex-col h-[calc(100vh-10rem)] relative">
+                      <div className="chat-view flex-1 flex flex-col h-[calc(100vh-10rem)] relative">
                         
                         {/* Conversation Header */}
                         <div className="h-14 border-b border-slate-900 flex items-center justify-between px-2 shrink-0">
