@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+.env.*
+node_modules
+frontend/node_modules
+.next
+frontend/.next
+__pycache__
+*.py[cod]
+*.db
+*.sqlite3
+multi_agent_chatbot.db
+uploads
+logs

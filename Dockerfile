@@ -9,9 +9,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set work directory
 WORKDIR /app
 
-# Install basic build tools
+# Install basic build tools, curl, and Node.js 20 (LTS)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,15 +26,25 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Download spaCy model
 RUN python -m spacy download en_core_web_sm
 
-# Copy project files
+# Install frontend dependencies (cached layer)
+WORKDIR /app/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci || npm install
+WORKDIR /app
+
+# Copy all project files
 COPY . .
 
-# Expose ports: 8000 for FastAPI, 8501 for Streamlit Dashboard
-EXPOSE 8000
-EXPOSE 8501
+# Convert Windows CRLF line endings to Linux LF and make start script executable
+RUN sed -i 's/\r$//' start.sh && chmod +x start.sh
 
-# Copy and make start script executable
-RUN chmod +x start.sh
+# Build Next.js application for production
+WORKDIR /app/frontend
+RUN npm run build
+WORKDIR /app
+
+# Expose ports: 3000 (Next.js default), 8000 (FastAPI), 8501 (Streamlit), 10000 (Render default)
+EXPOSE 3000 8000 8501 10000
 
 # Run services on container startup
 CMD ["./start.sh"]

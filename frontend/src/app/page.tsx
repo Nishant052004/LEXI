@@ -234,9 +234,20 @@ export default function AIOSHome() {
   const particlesCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const voiceCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // URL Configs
-  const BACKEND_URL = "http://localhost:8000";
-  const WS_URL = "ws://localhost:8000";
+  // URL Configs (Dynamic for production/Docker and local development)
+  const BACKEND_URL =
+    process.env.NEXT_PUBLIC_BACKEND_URL !== undefined
+      ? process.env.NEXT_PUBLIC_BACKEND_URL
+      : typeof window !== "undefined" && window.location.hostname !== "localhost"
+      ? ""
+      : "http://localhost:8000";
+  const WS_URL =
+    process.env.NEXT_PUBLIC_WS_URL !== undefined
+      ? process.env.NEXT_PUBLIC_WS_URL
+      : typeof window !== "undefined" && window.location.hostname !== "localhost"
+      ? `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}`
+      : "ws://localhost:8000";
+
 
   // Greeting Message based on time of day
   const getGreeting = () => {
