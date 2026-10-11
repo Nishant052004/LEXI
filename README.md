@@ -1,5 +1,6 @@
 # 🤖 LEXI — Multi-Agent AI System & Intelligence OS
 
+[![Live Demo](https://img.shields.io/badge/Render-Live%20Demo-46E3B7?style=flat&logo=render&logoColor=white)](https://lexi-a6ra.onrender.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Next.js-16.2+-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org)
 [![Groq](https://img.shields.io/badge/Groq-LLaMA--3.1--8B-f55036?style=flat)](https://groq.com)
@@ -7,6 +8,8 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776ab?style=flat&logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+> 🌐 **Live Demo on Render**: [https://lexi-a6ra.onrender.com](https://lexi-a6ra.onrender.com)
+>
 > **LEXI** is an advanced, full-stack **Multi-Agent AI System** that coordinates specialized intelligent agents working in harmony to understand, process, and respond to user queries efficiently. Built with Generative AI, Retrieval-Augmented Generation (RAG), and Natural Language Processing (NLP), LEXI unites a cybernetic Next.js operating shell, a FastAPI telemetry backend, and high-speed Groq LPU inference into an extensible cognitive platform.
 
 ---
@@ -210,6 +213,14 @@ If you prefer launching each service in its own terminal:
    streamlit run app.py --server.port 8501
    ```
    * Open your browser at: [http://localhost:8501](http://localhost:8501)
+
+---
+
+## 🌐 Live Cloud Deployment (Render)
+
+LEXI is live in production and accessible globally:
+* 🚀 **Web Application**: [https://lexi-a6ra.onrender.com](https://lexi-a6ra.onrender.com)
+* 📡 **API Heartbeat & Health**: [https://lexi-a6ra.onrender.com/health](https://lexi-a6ra.onrender.com/health)
 
 ---
 
