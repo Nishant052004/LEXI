@@ -12,8 +12,26 @@ from utils.metrics import metrics_collector
 
 logger = setup_logger("main_app")
 
-# Ensure all database schemas are created on startup
+# Ensure all database schemas are created on startup and seed initial admin user
 Base.metadata.create_all(bind=engine)
+try:
+    from database.connection import SessionLocal
+    from models.db_models import User
+    from services.auth_service import get_password_hash
+    with SessionLocal() as db:
+        admin_user = db.query(User).filter(User.username == "Nishant").first()
+        if not admin_user:
+            admin_user = User(
+                username="Nishant",
+                hashed_password=get_password_hash("admin123"),
+                role="admin"
+            )
+            db.add(admin_user)
+            db.commit()
+            logger.info("Initialized default admin user: Nishant")
+except Exception as e:
+    logger.warning(f"Could not auto-seed default user: {str(e)}")
+
 
 app = FastAPI(
     title=settings.APP_NAME,

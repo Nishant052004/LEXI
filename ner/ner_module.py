@@ -38,8 +38,9 @@ class NERExtractor:
     def load_custom_patterns_from_db(self):
         """Loads custom entity mappings from the database dynamically."""
         try:
-            from database.connection import SessionLocal
+            from database.connection import SessionLocal, engine, Base
             from models.db_models import CustomEntityMapping
+            Base.metadata.create_all(bind=engine)
             db = SessionLocal()
             mappings = db.query(CustomEntityMapping).all()
             self.custom_literal_patterns = []
@@ -48,7 +49,8 @@ class NERExtractor:
             db.close()
             logger.info(f"Loaded {len(self.custom_literal_patterns)} custom entity patterns from database.")
         except Exception as e:
-            logger.warning(f"Could not load custom patterns from database (table may not exist yet): {str(e)}")
+            logger.warning(f"Could not load custom patterns from database: {str(e)}")
+
 
     def _init_entity_ruler(self):
         """Initializes or updates the spacy EntityRuler with custom rules."""

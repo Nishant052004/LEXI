@@ -15,7 +15,11 @@ rate_limit_records: Dict[str, List[float]] = {}
 
 def check_rate_limit(request: Request):
     """Custom rate limiter that tracks requests per IP address."""
-    client_ip = request.client.host if request.client else "unknown"
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        client_ip = forwarded.split(",")[0].strip()
+    else:
+        client_ip = request.client.host if request.client else "unknown"
     now = time.time()
     
     # Filter timestamps older than 60 seconds

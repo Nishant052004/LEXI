@@ -13,7 +13,13 @@ logger = setup_logger("coordinator")
 Base.metadata.create_all(bind=engine)
 
 @track_execution_time("Coordinator")
-def decide_agent(messages: list, prompt: str) -> str:
+def decide_agent(
+    messages: list,
+    prompt: str,
+    user_id: int = None,
+    conversation_id: int = None,
+    username: str = None
+) -> str:
     """
     Orchestrates the entire Multi-Agent pipeline, keeping compatibility with the existing
     Streamlit app while leveraging NLP, NER, database memory, routing, and Groq LLM.
@@ -23,15 +29,25 @@ def decide_agent(messages: list, prompt: str) -> str:
     # 1. Open Database Session
     db = SessionLocal()
     try:
-        # 2. Setup Default User & Conversation (Personalized for Nishant)
-        # In a multi-user version, these would come from authentication contexts.
-        username = "Nishant"
-        default_user = memory_manager.get_or_create_user(db, username=username)
+        # 2. Setup User & Conversation Context
+        uname = username or "Nishant"
+        if user_id:
+            from models.db_models import User
+            default_user = db.query(User).filter(User.id == user_id).first()
+            if not default_user:
+                default_user = memory_manager.get_or_create_user(db, username=uname)
+        else:
+            default_user = memory_manager.get_or_create_user(db, username=uname)
         
-        # Reuse the latest conversation if we have message history, otherwise create a new one
-        from sqlalchemy import desc
         default_convo = None
-        if len(messages) > 1:
+        if conversation_id:
+            default_convo = db.query(Conversation).filter(
+                Conversation.id == conversation_id,
+                Conversation.user_id == default_user.id
+            ).first()
+
+        if not default_convo and len(messages) > 1:
+            from sqlalchemy import desc
             default_convo = db.query(Conversation).filter(
                 Conversation.user_id == default_user.id
             ).order_by(desc(Conversation.created_at)).first()

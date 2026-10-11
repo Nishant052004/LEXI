@@ -31,7 +31,13 @@ def chat(
     messages = []
     
     try:
-        response_text = decide_agent(messages, payload.prompt)
+        response_text = decide_agent(
+            messages=messages,
+            prompt=payload.prompt,
+            user_id=current_user.id,
+            conversation_id=payload.conversation_id,
+            username=current_user.username
+        )
         exec_time = time.perf_counter() - start_time
         
         # Query the database for the log we just generated to return detailed analysis
@@ -39,7 +45,7 @@ def chat(
             ChatLog.prompt == payload.prompt
         ).order_by(ChatLog.logged_at.desc()).first()
         
-        convo_id = latest_log.conversation_id if latest_log else 1
+        convo_id = latest_log.conversation_id if latest_log else (payload.conversation_id or 1)
         sentiment = latest_log.sentiment if latest_log else "neutral"
         intent = latest_log.intent if latest_log else "general"
         
